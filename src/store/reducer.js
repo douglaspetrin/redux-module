@@ -1,43 +1,58 @@
 const initialState = {
-    counter: 0
-}
+    counter: 0,
+    results: []
+};
 
 const reducer = (state = initialState, action) => {
     
-    if(action.type === 'INCREMENT') {
-        return {
+    switch( action.type ) {
+        case 'INCREMENT':
+            return { 
+                ...state,
+                counter: state.counter + 1  
+            }
             
-            ...state,
-            counter: state.counter + 1
-        }; 
-    };
+            case 'DECREMENT':
+                return {
+                    ...state,
+                    counter: state.counter - 1
+            }
 
-    if(action.type === 'DECREMENT') {
-        return {
+            case 'ADD':
+                return {  
+                    ...state,
+                    counter: state.counter + action.value
+                }
+
+            case 'SUBTRACT':
+                return {  
+                    ...state,
+                    counter: state.counter - action.value
+                }
+
+            case 'STORE_RESULT':
+                return {
+                    ...state,
+                    results: state.results.concat({ id: new Date(), value: state.counter }) //we want to do a snapshot of the array and push to the results array
+                }
+
+            case 'DELETE_RESULT':
+            // const id = 2;
+            // const newArray = [...state.results];
+            // newArray.splice(id, 1)
             
-            ...state,
-            counter: state.counter - 1
-        }; 
-    };
-
-    if(action.type === 'ADD') {
-        return {
+            const updatedArray = state.results.filter(result => result.id !== action.resultElId);
+                return {
+                    ...state,
+                    results: updatedArray
+                }
             
-            ...state,
-            counter: state.counter + action.value
-        }; 
-    };
+                default:
+                    // do nothing
+        }
+        
 
-    if(action.type === 'SUBTRACT') {
-        return {
-            
-            ...state,
-            counter: state.counter - action.value
-        }; 
-    };
-
-
-    return state;
+    return state;    
 };
 
 export default reducer;
